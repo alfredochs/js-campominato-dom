@@ -41,10 +41,15 @@ const gameDifficult = document.getElementById("game-difficult");
 const buttonPlayGame = document.getElementById("play-button");
 const generalSquare = document.getElementById("general-square");
 
+let bombeGenerate = [];
+
 buttonPlayGame.addEventListener("click", function () {
     const livelloScelto = parseInt(gameDifficult.value);
     const boxesToCreate = quantityBoxes(livelloScelto);
     generateBoxes(boxesToCreate);
+    bombeGenerate = generaBombeTotali(16, boxesToCreate);
+    console.log(bombeGenerate);
+
     // console.log("il livello scelto è: ", livelloScelto);
     // console.log(`box da creare ${boxesToCreate}`);
 });
@@ -98,5 +103,83 @@ function generateBoxes(boxesNumber) {
     }
 }
 function boxOnClick() {
-    this.classList.toggle("box-on-click");
+
+    // leggo l'array bombeGenerate 
+    // e controllo se in quel numero di quella specifica cella 
+    // è un numero che corrisponde ad una bomba
+    const cellaClickata = parseInt(this.textContent);
+    console.log(`cella clickata #${cellaClickata}`);
+
+    if (bombeGenerate.includes(cellaClickata)) {
+        this.classList.add("bomb");
+    } else {
+        this.classList.add("box-on-click");
+    }
+    return boxOnClick;
+}
+
+
+// Consigli del giorno: :party_wizard:
+// Scriviamo prima cosa vogliamo fare passo passo in italiano, dividiamo il lavoro in micro problemi.
+// Ad esempio:
+// Di cosa ho bisogno per generare i numeri?
+// Proviamo sempre prima con dei console.log() per capire se stiamo ricevendo i dati giusti.
+// Le validazioni e i controlli possiamo farli anche in un secondo momento. (modificato) 
+
+/*
+1 Creo l'array vuoto che conterrà il numero di bombe totali
+    i numeri casuali aumenteranno in base alle difficoltà 
+    (numero massimo in easy: 100, numero massimo in medium: 81...)
+2 i numeri dentro l'array non possono essere doppi
+3 al click su ogni cella (funzione gia creata)
+    se il numero clickato appartiene all'array cioè appartiene ad una boma
+        - alert preso una bomba
+        - cella diventa rossa
+    altrimenti continua a clickare su altre celle
+4 la partita finisce quando si clicka su una cella rossa
+    e finisce anche quando il numero di celle blu diventa il massimo 
+    (livello easy 100-16=84 celle blu e le altre saranno rosse, ecc)
+5 alla fine della partita bisognerà 
+    - mostrare tutte le bombe nascoste 
+    - e mostrare il punteggio (ogni click fatto su un contatore)
+*/
+
+// il secondo attributo lo si definisce dentro al click del play button cosi genererà le bombe
+function generaBombeTotali(bombeTotali, numeroMaxBoxLivello) {
+    // array per inserire le bombe con numero random
+    let arrayBombe = [];
+    //  variabile per ripetere il ciclo for : j
+    let j = 0;
+    // creo ciclo per generale le 16 bombe
+    for (i = 0; i < 16; i++) {
+        const bombaCreata = generaNumeroRandom(1, numeroMaxBoxLivello);
+        // numero boxes in base al livello = const boxestocreate
+        let numeroDoppio = arrayBombe.includes(bombaCreata);
+        if (!numeroDoppio) {
+            arrayBombe.push(bombaCreata);
+        } else {
+            i--;
+        }
+        j++;
+    }
+    // controllo i numeri creati dentro l'array
+    console.log(arrayBombe);
+    // controllo quante volte si è creato il ciclo for
+    console.log(`il ciclo si è effetuato ${j} volte`);
+    // controllo l'ordine dell'array per sapere se ci sono doppioni o no
+    let orderArray = arrayOrdinato(arrayBombe);
+    console.log(orderArray);
+
+    return arrayBombe;
+}
+
+
+function generaNumeroRandom(minNumber, maxNumber) {
+    const numRandom = Math.floor(Math.random() * (maxNumber - minNumber + 1) + minNumber);
+    return numRandom;
+}
+
+function arrayOrdinato(array) {
+    const arrayOrdinato = array.sort((a, b) => a - b);
+    return arrayOrdinato;
 }
