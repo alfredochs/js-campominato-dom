@@ -175,10 +175,14 @@ function arrayOrdinato(array) {
     const arrayOrdinato = array.sort((a, b) => a - b);
     return arrayOrdinato;
 }
-// contatore punti
+
+
+// contatore punti da  finire
 let c = 0;
 function contatore() {
     c = c + 1;
     contatorePunti.innerHTML = c;
 }
-contatorePunti.addEventListener("click", contatore);
+const boxesClicked = generalSquare.querySelectorAll(".box-on-click");
+boxesClicked.addEventListener("click", contatore);
+// contatorePunti.addEventListener("click", contatore);
