@@ -13,7 +13,7 @@
 }
 .container-main{
     background-color: #2D6AF2;
-    padding: 40px;
+    padding: 20px;
 }
 #general-square{
     /* padding: 40px; */
@@ -41,4 +41,15 @@
 
 .bomb{
     background-color: red;
+}
+/* CONTATORE PUNTI */
+#contatore-punti{
+    width: 100px;
+    height: 20px;
+    border: 1px solid black;
+    background-color: white;
+    margin-bottom: 20px;
+}
+.container-contatore{
+    text-align: center;
 }

@@ -40,6 +40,7 @@ Versione Florian
 const gameDifficult = document.getElementById("game-difficult");
 const buttonPlayGame = document.getElementById("play-button");
 const generalSquare = document.getElementById("general-square");
+const contatorePunti = document.getElementById("contatore-punti");
 
 let bombeGenerate = [];
 
@@ -118,15 +119,7 @@ function boxOnClick() {
     return boxOnClick;
 }
 
-
-// Consigli del giorno: :party_wizard:
-// Scriviamo prima cosa vogliamo fare passo passo in italiano, dividiamo il lavoro in micro problemi.
-// Ad esempio:
-// Di cosa ho bisogno per generare i numeri?
-// Proviamo sempre prima con dei console.log() per capire se stiamo ricevendo i dati giusti.
-// Le validazioni e i controlli possiamo farli anche in un secondo momento. (modificato) 
-
-/*
+/*Parte 2
 1 Creo l'array vuoto che conterrà il numero di bombe totali
     i numeri casuali aumenteranno in base alle difficoltà 
     (numero massimo in easy: 100, numero massimo in medium: 81...)
@@ -173,7 +166,6 @@ function generaBombeTotali(bombeTotali, numeroMaxBoxLivello) {
     return arrayBombe;
 }
 
-
 function generaNumeroRandom(minNumber, maxNumber) {
     const numRandom = Math.floor(Math.random() * (maxNumber - minNumber + 1) + minNumber);
     return numRandom;
@@ -183,3 +175,10 @@ function arrayOrdinato(array) {
     const arrayOrdinato = array.sort((a, b) => a - b);
     return arrayOrdinato;
 }
+// contatore punti
+let c = 0;
+function contatore() {
+    c = c + 1;
+    contatorePunti.innerHTML = c;
+}
+contatorePunti.addEventListener("click", contatore);
