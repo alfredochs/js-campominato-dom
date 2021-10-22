@@ -35,20 +35,23 @@ Versione Florian
   dobbiamo cambiare il suo colore.
 */
 
-
-
 const gameDifficult = document.getElementById("game-difficult");
 const buttonPlayGame = document.getElementById("play-button");
 const generalSquare = document.getElementById("general-square");
+
 const contatorePunti = document.getElementById("contatore-punti");
+const boxesClicked = generalSquare.querySelectorAll(".box-on-click");
 
 let bombeGenerate = [];
+let punteggio = 0;
+let giocoFinito = false;
 
 buttonPlayGame.addEventListener("click", function () {
     const livelloScelto = parseInt(gameDifficult.value);
     const boxesToCreate = quantityBoxes(livelloScelto);
     generateBoxes(boxesToCreate);
     bombeGenerate = generaBombeTotali(16, boxesToCreate);
+    giocoFinito = false;
     console.log(bombeGenerate);
 
     // console.log("il livello scelto è: ", livelloScelto);
@@ -111,11 +114,20 @@ function boxOnClick() {
     const cellaClickata = parseInt(this.textContent);
     console.log(`cella clickata #${cellaClickata}`);
 
+    if (this.classList.contains("bomb") || this.classList.contains("box-on-click") || giocoFinito) {
+        return;
+    }
+
     if (bombeGenerate.includes(cellaClickata)) {
         this.classList.add("bomb");
+        giocoFinito = true;
+        alert(`Hai clickato una bomba. Il tuo punteggio è stato di ${punteggio}`);
+        mostraTutteLeBombe();
     } else {
         this.classList.add("box-on-click");
+        punteggio++;
     }
+    console.log(punteggio);
     return boxOnClick;
 }
 
@@ -136,14 +148,14 @@ function boxOnClick() {
     - mostrare tutte le bombe nascoste 
     - e mostrare il punteggio (ogni click fatto su un contatore)
 */
-
 // il secondo attributo lo si definisce dentro al click del play button cosi genererà le bombe
+
 function generaBombeTotali(bombeTotali, numeroMaxBoxLivello) {
     // array per inserire le bombe con numero random
     let arrayBombe = [];
+    // creo ciclo per generale le 16 bombe (for, while o do while)
     //  variabile per ripetere il ciclo for : j
     let j = 0;
-    // creo ciclo per generale le 16 bombe
     for (i = 0; i < 16; i++) {
         const bombaCreata = generaNumeroRandom(1, numeroMaxBoxLivello);
         // numero boxes in base al livello = const boxestocreate
@@ -155,6 +167,7 @@ function generaBombeTotali(bombeTotali, numeroMaxBoxLivello) {
         }
         j++;
     }
+
     // controllo i numeri creati dentro l'array
     console.log(arrayBombe);
     // controllo quante volte si è creato il ciclo for
@@ -175,7 +188,24 @@ function arrayOrdinato(array) {
     const arrayOrdinato = array.sort((a, b) => a - b);
     return arrayOrdinato;
 }
+function mostraTutteLeBombe() {
+    // recuperare l'elenco di tutte le celle
+    // per ogni cella possiamo prenderla dalla classe "box" che ce l'hanno tutte
+    const allBoxes = generalSquare.querySelectorAll(".box");
+    // ciclare sull'array delle celle e ad ogni ciclo recuperare 
+    // quella che corrisponde all'indice della bomba
+    for (let i = 0; i < bombeGenerate.length; i++) {
+        // bomba = indice della cella - 1
+        // perche l'array parte da 0 e non da 1 
+        // la lista delle bombe parte da 1 
+        const bombaPosition = bombeGenerate[i];
+        // aggiungo la classe bomba alla bomba selezionata
+        const bombBox = allBoxes[bombaPosition - 1];
+        bombBox.classList.add("bomb");
 
+
+    }
+}
 
 // contatore punti da  finire
 let c = 0;
@@ -183,6 +213,3 @@ function contatore() {
     c = c + 1;
     contatorePunti.innerHTML = c;
 }
-const boxesClicked = generalSquare.querySelectorAll(".box-on-click");
-boxesClicked.addEventListener("click", contatore);
-// contatorePunti.addEventListener("click", contatore);
